@@ -20,6 +20,7 @@ public struct ItemHead
 public class GameManager : MonoBehaviour
 {
     private Customization customization;
+    private HudManager hudManager;
 
     public static GameManager Instance;
 
@@ -32,58 +33,81 @@ public class GameManager : MonoBehaviour
 
     [Header("Points")]
     public int pontosDisponiveis;
-    public int pontosUsadosForca;
-    public int pontosUsadosDestreza;
-    public int pontosUsadosConstituicao;
-    public int pontosUsadosInteligencia;
+
+
+    [HideInInspector] public int pontosUsadosForca;
+    [HideInInspector] public int pontosUsadosDestreza;
+    [HideInInspector] public int pontosUsadosConstituicao;
+    [HideInInspector] public int pontosUsadosInteligencia;
+
+    [Header("Status Base")]
+    public int hpBase;
+    public int mpBase;
+    public Vector2 dmgMeleeBase;
+    public Vector2 dmgMeleeBonusBase;
+    public Vector2 dmgMagicBase;
+    public Vector2 dmgMagicBonusBase;
+    public Vector2 dmgDistanceBase;
+    public Vector2 dmgDistanceBonusBase;
+    public int physicalDefenseBase;
+    public int magicDefenseBase;
+    public int dodgeBase;
+    public int criticoBase;
+    public int pesoMaxBase;
+
 
     [Header("Atributtes")]
+    public string namePlayer;
     public int level;
     public int xp;
-    public int forca;
-    public int destreza;
-    public int constituicao;
-    public int inteligencia;
+    public int[] xpToLevel;
+
+    [HideInInspector] public int hpMax;
+    [HideInInspector] public int mpMax;
+    [HideInInspector] public int forca;
+    [HideInInspector] public int destreza;
+    [HideInInspector] public int constituicao;
+    [HideInInspector] public int inteligencia;
 
     [Header("Status")] // vector2 x = valor min, y = valor max
-    public Vector2 dmgMelee;
-    public Vector2 dmgMeleeBonus;
-    public Vector2 dmgMagic;
-    public Vector2 dmgMagicBonus;
-    public Vector2 dmgDistance;
-    public Vector2 dmgDistanceBonus;
-    public int physicalDefense;
-    public int magicDefense;
-    public int dodge;
-    public int critico;
+    [HideInInspector] public Vector2 dmgMelee;
+    [HideInInspector] public Vector2 dmgMeleeBonus;
+    [HideInInspector] public Vector2 dmgMagic;
+    [HideInInspector] public Vector2 dmgMagicBonus;
+    [HideInInspector] public Vector2 dmgDistance;
+    [HideInInspector] public Vector2 dmgDistanceBonus;
+    [HideInInspector] public int physicalDefense;
+    [HideInInspector] public int magicDefense;
+    [HideInInspector] public int dodge;
+    [HideInInspector] public int critico;
 
     [Header("Res")]
-    public int resFogo;
-    public int resGelo;
-    public int resRaio;
-    public int resTerra;
-    public int resVento;
-    public int resVeneno;
+    [HideInInspector] public int resFogo;
+    [HideInInspector] public int resGelo;
+    [HideInInspector] public int resRaio;
+    [HideInInspector] public int resTerra;
+    [HideInInspector] public int resVento;
+    [HideInInspector] public int resVeneno;
 
-    public int pesoMax;
+    [HideInInspector] public int pesoMax;
 
     [Header("Equip")]
-    public int idBelt;
-    public int idCloth;
-    public int idGlove;
-    public int idShoe;
-    public int idShouder;
+    [HideInInspector] public int idBelt;
+    [HideInInspector] public int idCloth;
+    [HideInInspector] public int idGlove;
+    [HideInInspector] public int idShoe;
+    [HideInInspector] public int idShouder;
 
     [Header("Head")]
-    public int idHair;
-    public int idHead;
+    [HideInInspector] public int idHair;
+    [HideInInspector] public int idHead;
 
     [Header("Skin")]
-    public int idFace;
+    [HideInInspector] public int idSkin;
 
     [Header("Weapons")]
-    public int idRightHand;
-    public int idLeftHand;
+    [HideInInspector] public int idRightHand;
+    [HideInInspector] public int idLeftHand;
 
     [Header("Animators")]
     public Animator playerAnimator;
@@ -100,6 +124,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         customization = Customization.Instance;
+        hudManager = HudManager.Instance;
     }
 
     private void Update()
@@ -135,11 +160,18 @@ public class GameManager : MonoBehaviour
                 pontosUsadosDestreza++;
                 break;
             case "constituicao":
+                constituicao++;
+                pontosUsadosConstituicao++;
                 break;
             case "inteligencia":
+                inteligencia++;
+                pontosUsadosInteligencia++;
                 break;
         }
+
+        hudManager.UpdateHud();
     }
+
     public void AtrMinus(string atr)
     {
         switch (atr)
@@ -161,10 +193,24 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case "constituicao":
+                if (pontosUsadosConstituicao > 0)
+                {
+                    constituicao--;
+                    pontosUsadosConstituicao--;
+                    pontosDisponiveis++;
+                }
                 break;
             case "inteligencia":
+                if (pontosUsadosInteligencia > 0)
+                {
+                    inteligencia--;
+                    pontosUsadosInteligencia--;
+                    pontosDisponiveis++;
+                }
                 break;
         }
+
+        hudManager.UpdateHud();
     }
 
     public int SetDamage(Vector2 dmgTotal)
@@ -234,6 +280,29 @@ public class GameManager : MonoBehaviour
         SetEquip(idEquip);
     }
 
+    public void SetBonus()
+    {
+        switch (forca)
+        {
+            case 1:
+                dmgMelee = dmgMeleeBase;
+                pesoMax = pesoMaxBase;
+                break;
+            case 2:
+                dmgMelee = dmgMeleeBase + new Vector2(0, 1);
+                pesoMax = pesoMaxBase + 5;
+                break;
+            case 3:
+                dmgMelee = dmgMeleeBase + new Vector2(1, 2);
+                pesoMax = pesoMaxBase + 10;
+                break;
+            case 4:
+                dmgMelee = dmgMeleeBase + new Vector2(2, 2);
+                pesoMax = pesoMaxBase + 15;
+                break;
+        }
+    }
+
 
     #region SaveLoad
     public void SaveGame()
@@ -251,7 +320,7 @@ public class GameManager : MonoBehaviour
         data.idShouder = idShouder;
         data.idHead = idHead;
         data.idHair = idHair;
-        data.idFace = idFace;
+        data.idSkin = idSkin;
         data.idRightHand = idRightHand;
         data.idLeftHand = idLeftHand;
         data.forca = forca;
@@ -260,6 +329,7 @@ public class GameManager : MonoBehaviour
         data.inteligencia = inteligencia;
         data.level = level;
         data.xp = xp;
+        data.namePlayer = namePlayer;
 
 
         bf.Serialize(file, data);
@@ -291,7 +361,7 @@ public class GameManager : MonoBehaviour
         idShouder = data.idShouder;
         idHead = data.idHead;
         idHair = data.idHair;
-        idFace = data.idFace;
+        idSkin = data.idSkin;
         idRightHand = data.idRightHand;
         idLeftHand = data.idLeftHand;
         forca = data.forca;
@@ -300,10 +370,11 @@ public class GameManager : MonoBehaviour
         inteligencia = data.inteligencia;
         level = data.level;
         xp = data.xp;
+        namePlayer = data.namePlayer;
 
         customization.SetEquip(customization.belt, idBelt);
         customization.SetEquip(customization.cloth, idCloth);
-        customization.SetEquip(customization.face, idFace);
+        customization.SetEquip(customization.skin, idSkin);
         customization.SetEquip(customization.glove, idGlove);
         customization.SetEquip(customization.shoe, idShoe);
         customization.SetEquip(customization.shouder, idShouder);
@@ -319,6 +390,9 @@ public class GameManager : MonoBehaviour
 class SaveData
 {
     [Header("Atributtes")]
+    public string namePlayer;
+    public int hpMax;
+    public int mpMax;
     public int level;
     public int xp;
     public int forca;
@@ -338,7 +412,7 @@ class SaveData
     public int idHead;
 
     [Header("Skin")]
-    public int idFace;
+    public int idSkin;
 
     [Header("Weapons")]
     public int idRightHand;

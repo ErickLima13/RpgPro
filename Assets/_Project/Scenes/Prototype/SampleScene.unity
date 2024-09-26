@@ -6160,7 +6160,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1984558674}
         m_TargetAssemblyTypeName: HudManager, Assembly-CSharp
         m_MethodName: OnChangeSkin
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -10718,11 +10718,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1236006196}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.000030517578}
-  m_SizeDelta: {x: 180.951, y: 50}
-  m_Pivot: {x: 0, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 189.9, y: -1.5}
+  m_SizeDelta: {x: -93.853, y: 3}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &984427367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10743,7 +10743,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: hero
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d5bfa5e9491c18642ab465a5884e21e0, type: 2}
   m_sharedMaterial: {fileID: -9028486366327515546, guid: d5bfa5e9491c18642ab465a5884e21e0, type: 2}
@@ -10786,9 +10786,9 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
+  m_overflowMode: 3
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
@@ -10917,7 +10917,7 @@ MonoBehaviour:
   m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
-  m_CharacterLimit: 0
+  m_CharacterLimit: 9
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -10942,7 +10942,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1984558674}
         m_TargetAssemblyTypeName: HudManager, Assembly-CSharp
         m_MethodName: OnChangeName
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -20982,35 +20982,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3459e1f05029be34580a622a98b9135f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stance: 3
-  pontosDisponiveis: 0
+  stance: 0
+  pontosDisponiveis: 3
   pontosUsadosForca: 0
   pontosUsadosDestreza: 0
   pontosUsadosConstituicao: 0
   pontosUsadosInteligencia: 0
-  level: 0
-  xp: 0
+  hpBase: 10
+  mpBase: 10
+  dmgMeleeBase: {x: 1, y: 1}
+  dmgMeleeBonusBase: {x: 0, y: 0}
+  dmgMagicBase: {x: 1, y: 1}
+  dmgMagicBonusBase: {x: 0, y: 0}
+  dmgDistanceBase: {x: 1, y: 1}
+  dmgDistanceBonusBase: {x: 0, y: 0}
+  physicalDefenseBase: 1
+  magicDefenseBase: 1
+  dodgeBase: 1
+  criticoBase: 1
+  pesoMaxBase: 10
+  namePlayer: Hero
+  level: 1
+  xp: 5
+  xpToLevel: 00000000320000006400000096000000c8000000fa0000002c0100005e01000090010000c2010000
+  hpMax: 0
+  mpMax: 0
   forca: 1
   destreza: 1
   constituicao: 1
   inteligencia: 1
-  dmgMelee: {x: 1, y: 1}
+  dmgMelee: {x: 1, y: 2}
   dmgMeleeBonus: {x: 0, y: 0}
   dmgMagic: {x: 0, y: 0}
   dmgMagicBonus: {x: 0, y: 0}
   dmgDistance: {x: 0, y: 0}
   dmgDistanceBonus: {x: 0, y: 0}
-  physicalDefense: 0
-  magicDefense: 0
-  dodge: 0
-  critico: 0
-  resFogo: 0
-  resGelo: 0
-  resRaio: 0
-  resTerra: 0
-  resVento: 0
-  resVeneno: 0
-  pesoMax: 0
+  physicalDefense: 1
+  magicDefense: 1
+  dodge: 1
+  critico: 1
+  resFogo: 1
+  resGelo: 1
+  resRaio: 1
+  resTerra: 1
+  resVento: 1
+  resVeneno: 1
+  pesoMax: 1
   idBelt: -1
   idCloth: 0
   idGlove: 0
@@ -21018,7 +21035,7 @@ MonoBehaviour:
   idShouder: -1
   idHair: 3
   idHead: -1
-  idFace: 2
+  idSkin: 0
   idRightHand: -1
   idLeftHand: -1
   playerAnimator: {fileID: 5128482661104878571}
@@ -21067,6 +21084,16 @@ MonoBehaviour:
   constituicaoText: {fileID: 574417338}
   inteligenciaText: {fileID: 2142492323}
   pontosRestantes: {fileID: 482260413}
+  btnPlus:
+  - {fileID: 1992206019}
+  - {fileID: 1586421285}
+  - {fileID: 25932746}
+  - {fileID: 1654339472}
+  btnMinus:
+  - {fileID: 1109628638}
+  - {fileID: 159760069}
+  - {fileID: 560860058}
+  - {fileID: 2120132852}
   nomeTextStatus: {fileID: 984427367}
   levelTextStatus: {fileID: 366293815}
   expTextStatus: {fileID: 1894070690}
@@ -23177,7 +23204,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1984558674}
         m_TargetAssemblyTypeName: HudManager, Assembly-CSharp
         m_MethodName: OnChangeHair
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -29481,7 +29508,7 @@ MonoBehaviour:
     hairType: 2
   - item: {fileID: 5079235592177501351}
     hairType: 2
-  face:
+  skin:
   - {fileID: 5079273245577539465}
   - {fileID: 5078512437814973935}
   - {fileID: 5078752748573321471}

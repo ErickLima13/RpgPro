@@ -12,7 +12,7 @@ public class Customization : MonoBehaviour
     public GameObject[] belt;
     public GameObject[] cloth;
     public ItemHead[] head;
-    public GameObject[] face;
+    public GameObject[] skin;
     public GameObject[] glove;
     public GameObject[] hair;
     public GameObject[] hairHalf;

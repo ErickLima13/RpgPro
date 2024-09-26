@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +27,8 @@ public class HudManager : MonoBehaviour
     public TextMeshProUGUI constituicaoText;
     public TextMeshProUGUI inteligenciaText;
     public Text pontosRestantes;
+    public Button[] btnPlus;
+    public Button[] btnMinus;
 
     [Header("Texts Status")]
     public TextMeshProUGUI nomeTextStatus;
@@ -49,6 +49,7 @@ public class HudManager : MonoBehaviour
     public TextMeshProUGUI constituicaoTextStatus;
     public TextMeshProUGUI inteligenciaTextStatus;
 
+
     private void Awake()
     {
         Instance = this;
@@ -60,15 +61,67 @@ public class HudManager : MonoBehaviour
         customization = Customization.Instance;
 
         sliderHair.maxValue = customization.hair.Length - 1;
-        sliderSkin.maxValue = customization.face.Length - 1;
+        sliderSkin.maxValue = customization.skin.Length - 1;
 
         btnSaveChar.GetComponent<Button>().onClick.AddListener(BtnSaveChar);
         btnNewGame.GetComponent<Button>().onClick.AddListener(BtnNewGame);
         btnContinue.GetComponent<Button>().onClick.AddListener(BtnContinue);
 
-       // inputName.onValueChanged.AddListener(OnChangeName);
+        // inputName.onValueChanged.AddListener(OnChangeName);
 
-       
+        UpdateHud();
+
+    }
+
+    public void UpdateHud()
+    {
+        gameManager.SetBonus();
+
+        pontosRestantes.text = gameManager.pontosDisponiveis.ToString();
+        forcaText.text = gameManager.forca.ToString();
+        destrezaText.text = gameManager.destreza.ToString();
+        constituicaoText.text = gameManager.constituicao.ToString();
+        inteligenciaText.text = gameManager.inteligencia.ToString();
+
+        foreach (Button b in btnPlus)
+        {
+            b.interactable = gameManager.pontosDisponiveis > 0;
+        }
+
+        foreach (Button b in btnMinus)
+        {
+            b.interactable = false;
+        }
+
+        DisableButton(gameManager.pontosUsadosForca, 0);
+        DisableButton(gameManager.pontosUsadosDestreza, 1);
+        DisableButton(gameManager.pontosUsadosConstituicao, 2);
+        DisableButton(gameManager.pontosUsadosInteligencia, 3);
+
+        //Status
+
+
+        //public TextMeshProUGUI hpTextStatus;
+        //public TextMeshProUGUI mpTextStatus;
+
+        nomeTextStatus.text = gameManager.namePlayer;
+        levelTextStatus.text = gameManager.level.ToString();
+        expTextStatus.text =  gameManager.xp + "/" + gameManager.xpToLevel[gameManager.level].ToString();
+        forcaTextStatus.text = gameManager.forca.ToString();
+        destrezaTextStatus.text = gameManager.destreza.ToString();
+        constituicaoTextStatus.text = gameManager.constituicao.ToString();
+        inteligenciaTextStatus.text = gameManager.inteligencia.ToString();
+        dmgMeleeTextStatus.text = gameManager.dmgMelee.ToString("N0");
+        dmgMagicTextStatus.text = gameManager.dmgMagic.ToString("N0");
+        dmgDistanceTextStatus.text = gameManager.dmgDistance.ToString("N0");
+        dodgeTextStatus.text = gameManager.dodge.ToString("N0") + "%";
+        physicalDefenseTextStatus.text = gameManager.physicalDefense.ToString("N0") + "%";
+        magicDefenseTextStatus.text = gameManager.magicDefense.ToString("N0") + "%";
+        resVenenoTextStatus.text = gameManager.resVeneno.ToString("N0") + "%";
+        pesoMaxTextStatus.text = gameManager.pesoMax.ToString("N0") + " kg";
+
+
+
     }
 
     public void BtnSaveChar()
@@ -86,18 +139,30 @@ public class HudManager : MonoBehaviour
         print("legal2");
     }
 
-    public void OnChangeName()
+    public void OnChangeName(string text)
     {
-
+        gameManager.namePlayer = text;
+        UpdateHud();
     }
 
-    public void OnChangeSkin()
+    public void OnChangeSkin(float value)
     {
-
+        gameManager.idSkin = (int)value;
+        customization.SetEquip(customization.skin, gameManager.idSkin);
     }
 
-    public void OnChangeHair()
+    public void OnChangeHair(float value)
     {
-
+        gameManager.idHair = (int)value;
+        customization.SetEquip(customization.hair, gameManager.idHair);
     }
+
+    private void DisableButton(int value, int id)
+    {
+        if (value > 0)
+        {
+            btnMinus[id].interactable = true;
+        }
+    }
+
 }

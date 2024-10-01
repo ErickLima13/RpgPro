@@ -20963,6 +20963,7 @@ GameObject:
   - component: {fileID: 1984558673}
   - component: {fileID: 1984558672}
   - component: {fileID: 1984558674}
+  - component: {fileID: 1984558675}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -21001,6 +21002,7 @@ MonoBehaviour:
   dodgeBase: 1
   criticoBase: 1
   pesoMaxBase: 10
+  resVenenoBase: 0
   namePlayer: Hero
   level: 1
   xp: 5
@@ -21011,7 +21013,7 @@ MonoBehaviour:
   destreza: 1
   constituicao: 1
   inteligencia: 1
-  dmgMelee: {x: 1, y: 2}
+  dmgMelee: {x: 0, y: 0}
   dmgMeleeBonus: {x: 0, y: 0}
   dmgMagic: {x: 0, y: 0}
   dmgMagicBonus: {x: 0, y: 0}
@@ -21044,6 +21046,7 @@ MonoBehaviour:
   - {fileID: 9100000, guid: 98afa7d59bb946847b781b08b922912b, type: 2}
   - {fileID: 9100000, guid: 2538b73f5c16ea04186e60f5a7eff448, type: 2}
   idEquip: 0
+  calculateAttributes: {fileID: 1984558675}
 --- !u!4 &1984558673
 Transform:
   m_ObjectHideFlags: 0
@@ -21111,6 +21114,18 @@ MonoBehaviour:
   destrezaTextStatus: {fileID: 1019348705}
   constituicaoTextStatus: {fileID: 565981125}
   inteligenciaTextStatus: {fileID: 1724576376}
+--- !u!114 &1984558675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984558671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebe5ec6f9ab96af449c415bba23056e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1992206017
 GameObject:
   m_ObjectHideFlags: 0

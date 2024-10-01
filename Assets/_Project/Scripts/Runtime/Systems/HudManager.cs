@@ -107,6 +107,9 @@ public class HudManager : MonoBehaviour
         nomeTextStatus.text = gameManager.namePlayer;
         levelTextStatus.text = gameManager.level.ToString();
         expTextStatus.text =  gameManager.xp + "/" + gameManager.xpToLevel[gameManager.level].ToString();
+        hpTextStatus.text =  gameManager.hpMax.ToString();
+        mpTextStatus.text =  gameManager.mpMax.ToString();
+     
         forcaTextStatus.text = gameManager.forca.ToString();
         destrezaTextStatus.text = gameManager.destreza.ToString();
         constituicaoTextStatus.text = gameManager.constituicao.ToString();
@@ -126,7 +129,7 @@ public class HudManager : MonoBehaviour
 
     public void BtnSaveChar()
     {
-        print("legal");
+        gameManager.SaveGame();
     }
 
     public void BtnNewGame()
@@ -137,6 +140,8 @@ public class HudManager : MonoBehaviour
     public void BtnContinue()
     {
         print("legal2");
+        UpdateHud();
+        gameManager.LoadGame();
     }
 
     public void OnChangeName(string text)

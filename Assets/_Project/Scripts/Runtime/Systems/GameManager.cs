@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
     public int dodgeBase;
     public int criticoBase;
     public int pesoMaxBase;
+    public int resVenenoBase;
 
 
     [Header("Atributtes")]
@@ -70,7 +71,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int inteligencia;
 
     [Header("Status")] // vector2 x = valor min, y = valor max
-    [HideInInspector] public Vector2 dmgMelee;
+    public Vector2 dmgMelee;
     [HideInInspector] public Vector2 dmgMeleeBonus;
     [HideInInspector] public Vector2 dmgMagic;
     [HideInInspector] public Vector2 dmgMagicBonus;
@@ -115,6 +116,7 @@ public class GameManager : MonoBehaviour
 
     public int idEquip;
 
+    private CalculateAttributes calculateAttributes;
 
     private void Awake()
     {
@@ -125,6 +127,7 @@ public class GameManager : MonoBehaviour
     {
         customization = Customization.Instance;
         hudManager = HudManager.Instance;
+        calculateAttributes = GetComponent<CalculateAttributes>();
     }
 
     private void Update()
@@ -282,27 +285,16 @@ public class GameManager : MonoBehaviour
 
     public void SetBonus()
     {
-        switch (forca)
-        {
-            case 1:
-                dmgMelee = dmgMeleeBase;
-                pesoMax = pesoMaxBase;
-                break;
-            case 2:
-                dmgMelee = dmgMeleeBase + new Vector2(0, 1);
-                pesoMax = pesoMaxBase + 5;
-                break;
-            case 3:
-                dmgMelee = dmgMeleeBase + new Vector2(1, 2);
-                pesoMax = pesoMaxBase + 10;
-                break;
-            case 4:
-                dmgMelee = dmgMeleeBase + new Vector2(2, 2);
-                pesoMax = pesoMaxBase + 15;
-                break;
-        }
-    }
+        // forca - dmgmelee,peso
+        // destreza - dmgdistance e dodge
+        //constituicao - hpmax,resfisica,resveneno
+        //inteligencia - spmax,dmgmagic,resmagica
 
+        calculateAttributes.SetForDex(forca, ref dmgMelee, ref pesoMax, pesoMaxBase);
+        calculateAttributes.SetForDex(destreza, ref dmgDistance, ref dodge, dodgeBase);
+        calculateAttributes.SetCon(constituicao, ref hpMax, hpBase, ref physicalDefense, physicalDefenseBase, ref resVeneno, resVenenoBase);
+        calculateAttributes.SetInt(inteligencia,ref dmgMagic,ref mpMax, mpBase,ref magicDefense,magicDefenseBase);
+    }
 
     #region SaveLoad
     public void SaveGame()

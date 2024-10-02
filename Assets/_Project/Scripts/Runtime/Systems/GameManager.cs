@@ -10,6 +10,11 @@ public enum HairType
     Full, Half, None
 }
 
+public enum GameState
+{
+    Title, Main, Gameplay
+}
+
 [Serializable]
 public struct ItemHead
 {
@@ -22,6 +27,7 @@ public class GameManager : MonoBehaviour
     private Customization customization;
     private HudManager hudManager;
 
+    public GameState gameState;
     public static GameManager Instance;
 
     public enum Stance
@@ -100,8 +106,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int idShouder;
 
     [Header("Head")]
-    [HideInInspector] public int idHair;
-    [HideInInspector] public int idHead;
+    public int idHair;
+    public int idHead;
 
     [Header("Skin")]
     [HideInInspector] public int idSkin;
@@ -293,7 +299,51 @@ public class GameManager : MonoBehaviour
         calculateAttributes.SetForDex(forca, ref dmgMelee, ref pesoMax, pesoMaxBase);
         calculateAttributes.SetForDex(destreza, ref dmgDistance, ref dodge, dodgeBase);
         calculateAttributes.SetCon(constituicao, ref hpMax, hpBase, ref physicalDefense, physicalDefenseBase, ref resVeneno, resVenenoBase);
-        calculateAttributes.SetInt(inteligencia,ref dmgMagic,ref mpMax, mpBase,ref magicDefense,magicDefenseBase);
+        calculateAttributes.SetInt(inteligencia, ref dmgMagic, ref mpMax, mpBase, ref magicDefense, magicDefenseBase);
+    }
+
+    public void ChangeGameState(GameState newState)
+    {
+        gameState = newState;
+    }
+
+    public bool HasLoad()
+    {
+        return File.Exists(Application.persistentDataPath + "/save.dat");
+    }
+
+    public void NewChar()
+    {
+        idBelt = -1;
+        idCloth = 0;
+        idGlove = 0;
+        idShoe = 0;
+        idShouder = -1;
+        idHead = -1;
+        idHair = 3;
+        idSkin = 2;
+        idRightHand = -1;
+        idLeftHand = -1;
+
+        forca = 1;
+        destreza = 1;
+        constituicao = 1;
+        inteligencia = 1;
+        level = 1;
+        xp = 0;
+        namePlayer = "Hero";
+        pontosDisponiveis = 3;
+
+        customization.SetEquip(customization.belt, idBelt);
+        customization.SetEquip(customization.cloth, idCloth);
+        customization.SetEquip(customization.skin, idSkin);
+        customization.SetEquip(customization.glove, idGlove);
+        customization.SetEquip(customization.shoe, idShoe);
+        customization.SetEquip(customization.shouder, idShouder);
+        customization.SetEquip(customization.rightHand, idRightHand);
+        customization.SetEquip(customization.leftHand, idLeftHand);
+        customization.SetHead();
+        SaveGame();
     }
 
     #region SaveLoad
@@ -322,6 +372,7 @@ public class GameManager : MonoBehaviour
         data.level = level;
         data.xp = xp;
         data.namePlayer = namePlayer;
+        data.pontosDisponiveis = pontosDisponiveis;
 
 
         bf.Serialize(file, data);
@@ -363,6 +414,7 @@ public class GameManager : MonoBehaviour
         level = data.level;
         xp = data.xp;
         namePlayer = data.namePlayer;
+        pontosDisponiveis = data.pontosDisponiveis;
 
         customization.SetEquip(customization.belt, idBelt);
         customization.SetEquip(customization.cloth, idCloth);
@@ -373,7 +425,6 @@ public class GameManager : MonoBehaviour
         customization.SetEquip(customization.rightHand, idRightHand);
         customization.SetEquip(customization.leftHand, idLeftHand);
         customization.SetHead();
-
     }
     #endregion
 }
@@ -409,6 +460,8 @@ class SaveData
     [Header("Weapons")]
     public int idRightHand;
     public int idLeftHand;
+
+    public int pontosDisponiveis;
 }
 
 

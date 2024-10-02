@@ -9,12 +9,13 @@ public class HudManager : MonoBehaviour
 
     public static HudManager Instance;
 
+    public GameObject titlePanel;
     public GameObject panelCustomization;
     public GameObject panelNewGame;
 
-    public GameObject btnSaveChar;
-    public GameObject btnNewGame;
-    public GameObject btnContinue;
+    public Button btnSaveChar;
+    public Button btnNewGame;
+    public Button btnContinue;
 
     public TMP_InputField inputName;
 
@@ -63,14 +64,38 @@ public class HudManager : MonoBehaviour
         sliderHair.maxValue = customization.hair.Length - 1;
         sliderSkin.maxValue = customization.skin.Length - 1;
 
-        btnSaveChar.GetComponent<Button>().onClick.AddListener(BtnSaveChar);
-        btnNewGame.GetComponent<Button>().onClick.AddListener(BtnNewGame);
-        btnContinue.GetComponent<Button>().onClick.AddListener(BtnContinue);
+        btnSaveChar.onClick.AddListener(BtnSaveChar);
+        btnNewGame.onClick.AddListener(BtnNewGame);
+        btnContinue.onClick.AddListener(BtnContinue);
 
-        // inputName.onValueChanged.AddListener(OnChangeName);
+        titlePanel.SetActive(true);
+        panelCustomization.SetActive(false);
 
-        UpdateHud();
+        btnContinue.interactable = gameManager.HasLoad();
 
+        if (gameManager.HasLoad())
+        {
+            panelNewGame.SetActive(false);
+            gameManager.LoadGame();
+            UpdateHud();
+        }
+        else
+        {
+            panelNewGame.SetActive(true);
+        }
+    }
+
+    private void Update()
+    {
+        if (gameManager.gameState == GameState.Title)
+        {
+            if (Input.anyKeyDown)
+            {
+                titlePanel.SetActive(false);
+                panelCustomization.SetActive(true);
+                gameManager.ChangeGameState(GameState.Main);
+            }
+        }
     }
 
     public void UpdateHud()
@@ -88,6 +113,8 @@ public class HudManager : MonoBehaviour
             b.interactable = gameManager.pontosDisponiveis > 0;
         }
 
+        btnSaveChar.interactable = gameManager.pontosDisponiveis <= 0;
+
         foreach (Button b in btnMinus)
         {
             b.interactable = false;
@@ -99,17 +126,12 @@ public class HudManager : MonoBehaviour
         DisableButton(gameManager.pontosUsadosInteligencia, 3);
 
         //Status
-
-
-        //public TextMeshProUGUI hpTextStatus;
-        //public TextMeshProUGUI mpTextStatus;
-
         nomeTextStatus.text = gameManager.namePlayer;
         levelTextStatus.text = gameManager.level.ToString();
-        expTextStatus.text =  gameManager.xp + "/" + gameManager.xpToLevel[gameManager.level].ToString();
-        hpTextStatus.text =  gameManager.hpMax.ToString();
-        mpTextStatus.text =  gameManager.mpMax.ToString();
-     
+        expTextStatus.text = gameManager.xp + "/" + gameManager.xpToLevel[gameManager.level].ToString();
+        hpTextStatus.text = gameManager.hpMax.ToString();
+        mpTextStatus.text = gameManager.mpMax.ToString();
+
         forcaTextStatus.text = gameManager.forca.ToString();
         destrezaTextStatus.text = gameManager.destreza.ToString();
         constituicaoTextStatus.text = gameManager.constituicao.ToString();
@@ -122,26 +144,27 @@ public class HudManager : MonoBehaviour
         magicDefenseTextStatus.text = gameManager.magicDefense.ToString("N0") + "%";
         resVenenoTextStatus.text = gameManager.resVeneno.ToString("N0") + "%";
         pesoMaxTextStatus.text = gameManager.pesoMax.ToString("N0") + " kg";
-
-
-
     }
 
     public void BtnSaveChar()
     {
         gameManager.SaveGame();
+        panelCustomization.SetActive(false);
+        Transition._instance.Fade();
     }
 
     public void BtnNewGame()
     {
-        print("legal1");
+        gameManager.NewChar();
+        UpdateHud();
+        panelNewGame.SetActive(true);
     }
 
     public void BtnContinue()
     {
-        print("legal2");
-        UpdateHud();
-        gameManager.LoadGame();
+        Transition._instance.Fade();
+        panelCustomization.SetActive(false);
+
     }
 
     public void OnChangeName(string text)

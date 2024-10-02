@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Customization : MonoBehaviour
@@ -26,24 +24,7 @@ public class Customization : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-    }
-
-    private void Start()
-    {
         gameManager = GameManager.Instance;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            gameManager.SaveGame();
-        }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            gameManager.LoadGame();
-        }
     }
 
     public void SetHead()
@@ -63,14 +44,14 @@ public class Customization : MonoBehaviour
             h.item.SetActive(false);
         }
 
-        if (CheckIdEquip(gameManager.idHead,head))
+        if (CheckIdEquip(gameManager.idHead, head))
         {
             head[gameManager.idHead].item.SetActive(true);
 
             switch (head[gameManager.idHead].hairType)
             {
                 case HairType.Full:
-                    if (CheckIdEquip(gameManager.idHair,hair))
+                    if (CheckIdEquip(gameManager.idHair, hair))
                     {
                         hair[gameManager.idHair].SetActive(true);
                     }
@@ -83,7 +64,7 @@ public class Customization : MonoBehaviour
                     break;
             }
         }
-        else if(gameManager.idHead < 0)
+        else if (gameManager.idHead < 0)
         {
             if (CheckIdEquip(gameManager.idHair, hair))
             {
@@ -101,7 +82,7 @@ public class Customization : MonoBehaviour
 
         if (gameManager.idBelt >= 0 && gameManager.idBelt < belt.Length)
         {
-            belt[gameManager.idBelt].SetActive(true);   
+            belt[gameManager.idBelt].SetActive(true);
         }
     }
 
@@ -112,7 +93,7 @@ public class Customization : MonoBehaviour
         return id >= 0 && id < equips.Length;
     }
 
-    public void SetEquip(GameObject[] equip, int idEquip) 
+    public void SetEquip(GameObject[] equip, int idEquip)
     {
         foreach (GameObject b in equip)
         {

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Transition : MonoBehaviour
@@ -19,11 +17,18 @@ public class Transition : MonoBehaviour
 
         _instance = this;
         DontDestroyOnLoad(this.gameObject);
+
+        anim = GetComponent<Animator>();
     }
 
-   public void Fade()
+    private void Start()
     {
-       anim.SetTrigger("Fade");
+        Fade();
+    }
+
+    public void Fade()
+    {
+        anim.SetTrigger("Fade");
     }
 
     void FadeComplete()

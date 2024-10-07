@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -32,6 +33,9 @@ public class PlayerController : MonoBehaviour
 
     public bool isDefense;
 
+    //[Header("New Input")]
+    //public InputAction inputAction;
+
     private void Start()
     {
         cam = Camera.main.transform;
@@ -39,7 +43,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         meleeController = GetComponent<MeleeController>();
 
-        animator.SetBool("isSit", true);
+        //animator.SetBool("isSit", true);
 
         //Cursor.lockState = CursorLockMode.Locked;
        // Cursor.visible = false;
@@ -50,7 +54,6 @@ public class PlayerController : MonoBehaviour
         GetInputs();
         ApplyGravity();
         MoveCharacter();
-        Jump();
     }
 
     private void FixedUpdate()
@@ -60,35 +63,6 @@ public class PlayerController : MonoBehaviour
 
     private void GetInputs()
     {
-        if (!isAttack && !isLanding)
-        {
-            direction = new Vector3(Input.GetAxis("Horizontal"),
-                0, Input.GetAxis("Vertical"));
-        }
-        else
-        {
-            direction = Vector3.zero;
-        }
-
-
-        if (Input.GetButtonDown("Fire1") && !isReceivedInput && !isDefense  && GameManager.Instance.idEquip > 0)
-        {
-            isReceivedInput = true;
-            isAttack = true;
-
-            if (!isGrounded)
-            {
-                idCombo = 6; // attack in Air
-            }
-            else
-            {
-                idCombo++;
-            }
-           
-            animator.SetInteger("idCombo", idCombo);
-        }
-
-
         //sistema de defesa
         if (Input.GetMouseButtonDown(1))
         {
@@ -102,6 +76,26 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("defend", isDefense);
         }
 
+    }
+
+    public void SetAttack(InputAction.CallbackContext value)
+    {
+        if (!isReceivedInput && !isDefense && GameManager.Instance.idEquip > 0)
+        {
+            isReceivedInput = true;
+            isAttack = true;
+
+            if (!isGrounded)
+            {
+                idCombo = 6; // attack in Air
+            }
+            else
+            {
+                idCombo++;
+            }
+
+            animator.SetInteger("idCombo", idCombo);
+        }
     }
 
     public void CheckCombo()
@@ -151,6 +145,7 @@ public class PlayerController : MonoBehaviour
                * direction.magnitude * Time.deltaTime);
 
         animator.SetBool("isWalk", isWalk);
+      
     }
 
     private void ApplyGravity()
@@ -162,16 +157,16 @@ public class PlayerController : MonoBehaviour
 
         velocity.y += gravity * Time.deltaTime;
         characterController.Move(velocity * Time.deltaTime);
+
+        animator.SetBool("isGrounded", isGrounded);
     }
 
-    private void Jump()
+    public void Jump(InputAction.CallbackContext value)
     {
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
         }
-
-        animator.SetBool("isGrounded", isGrounded);
     }
 
     private void JumpEnd(bool value)
@@ -179,4 +174,18 @@ public class PlayerController : MonoBehaviour
         isLanding = value;
     }
 
+    public void SetMovement(InputAction.CallbackContext value)
+    {
+        Vector2 n = value.ReadValue<Vector2>();
+
+        if (!isAttack && !isLanding)
+        {
+            direction = new Vector3(n.x,
+                0, n.y);
+        }
+        else
+        {
+            direction = Vector3.zero;
+        }
+    }
 }

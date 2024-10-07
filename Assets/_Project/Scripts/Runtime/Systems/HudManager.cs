@@ -50,6 +50,7 @@ public class HudManager : MonoBehaviour
     public TextMeshProUGUI constituicaoTextStatus;
     public TextMeshProUGUI inteligenciaTextStatus;
 
+    private ControlTime controlTime;
 
     private void Awake()
     {
@@ -60,6 +61,7 @@ public class HudManager : MonoBehaviour
     {
         gameManager = GameManager.Instance;
         customization = Customization.Instance;
+        controlTime = GetComponent<ControlTime>();
 
         sliderHair.maxValue = customization.hair.Length - 1;
         sliderSkin.maxValue = customization.skin.Length - 1;
@@ -151,6 +153,7 @@ public class HudManager : MonoBehaviour
         gameManager.SaveGame();
         panelCustomization.SetActive(false);
         Transition._instance.Fade();
+        StartCoroutine(controlTime.StartGame());
     }
 
     public void BtnNewGame()
@@ -164,7 +167,7 @@ public class HudManager : MonoBehaviour
     {
         Transition._instance.Fade();
         panelCustomization.SetActive(false);
-
+        StartCoroutine(controlTime.StartGame());
     }
 
     public void OnChangeName(string text)

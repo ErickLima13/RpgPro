@@ -62,7 +62,6 @@ public class GameManager : MonoBehaviour
     public int pesoMaxBase;
     public int resVenenoBase;
 
-
     [Header("Atributtes")]
     public string namePlayer;
     public int level;
@@ -123,6 +122,8 @@ public class GameManager : MonoBehaviour
     public int idEquip;
 
     private CalculateAttributes calculateAttributes;
+
+    public GameObject camGameplay;
 
     private void Awake()
     {
@@ -310,6 +311,11 @@ public class GameManager : MonoBehaviour
     public bool HasLoad()
     {
         return File.Exists(Application.persistentDataPath + "/save.dat");
+    }
+
+    public bool IsGameplay()
+    {
+        return gameState == GameState.Gameplay;
     }
 
     public void NewChar()

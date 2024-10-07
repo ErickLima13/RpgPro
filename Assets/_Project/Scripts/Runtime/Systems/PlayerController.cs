@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         meleeController = GetComponent<MeleeController>();
 
-        //animator.SetBool("isSit", true);
+        animator.SetBool("isSit", true);
 
         //Cursor.lockState = CursorLockMode.Locked;
        // Cursor.visible = false;
@@ -48,6 +48,11 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (!GameManager.Instance.IsGameplay())
+        {
+            return;
+        }
+
         ApplyGravity();
         MoveCharacter();
     }

@@ -33,9 +33,6 @@ public class PlayerController : MonoBehaviour
 
     public bool isDefense;
 
-    //[Header("New Input")]
-    //public InputAction inputAction;
-
     private void Start()
     {
         cam = Camera.main.transform;
@@ -51,7 +48,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        GetInputs();
         ApplyGravity();
         MoveCharacter();
     }
@@ -61,16 +57,16 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, 0.3f, whatIsGround);
     }
 
-    private void GetInputs()
+    public void SetDefend(InputAction.CallbackContext value)
     {
         //sistema de defesa
-        if (Input.GetMouseButtonDown(1))
+        if (value.performed)
         {
             isDefense = true;
             animator.SetBool("defend", isDefense);
         }
 
-        if (Input.GetMouseButtonUp(1))
+        if (value.canceled)
         {
             isDefense = false;
             animator.SetBool("defend", isDefense);

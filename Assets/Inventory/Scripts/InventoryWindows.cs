@@ -19,6 +19,8 @@ public class InventoryWindows : MonoBehaviour
 
     public void SelectTab(int idTab)
     {
+        Inventory.Instance.itemInfoPanel.SetActive(false);
+
         foreach (Image i in tabs)
         {
             i.sprite = imageTab[0];
